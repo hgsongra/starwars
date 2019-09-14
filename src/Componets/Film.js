@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import axios from "axios";
-
+import ls from "local-storage";
 export class Film extends Component {
   state = {
     films: [],
     displayFilms: [],
-    favFilms: []
+    favFilms: ls.get("favFilmIds") || []
   };
 
   fetchFilms = () => {
@@ -15,6 +15,13 @@ export class Film extends Component {
         displayFilms: response.data.results
       });
       if (this.state.favFilms.length > 0) {
+        this.state.favFilms.forEach(id => {
+          let film = this.state.displayFilms.find(function(f) {
+            return f.episode_id === id;
+          });
+          film.isFav = true;
+        });
+        this.setState({ displayFilms: this.state.displayFilms });
         this.sortFilmsByFav();
       }
     });
@@ -49,9 +56,16 @@ export class Film extends Component {
       return f.episode_id === id;
     });
     film.isFav = !film.isFav;
+    if (film.isFav) {
+      this.state.favFilms.push(id);
+    } else {
+      this.state.favFilms = this.state.favFilms.filter(fid => fid !== id);
+    }
     this.setState({
-      displayFilms: this.state.displayFilms
+      displayFilms: this.state.displayFilms,
+      favFilms: this.state.favFilms
     });
+    ls.set("favFilmIds", this.state.favFilms);
     this.sortFilmsByFav();
   };
 
@@ -62,8 +76,7 @@ export class Film extends Component {
           <input
             className='form-control mr-sm-2'
             type='search'
-            placeholder='Search'
-            aria-label='Search'
+            placeholder='Search by Film name'
             onChange={this.searchHandler}
           />
         </div>
