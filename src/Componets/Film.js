@@ -58,6 +58,7 @@ export class Film extends Component {
     film.isFav = !film.isFav;
     if (film.isFav) {
       this.state.favFilms.push(id);
+      alert(film.title + "is added to favorite");
     } else {
       this.state.favFilms = this.state.favFilms.filter(fid => fid !== id);
     }
