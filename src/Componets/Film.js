@@ -84,10 +84,12 @@ export class Film extends Component {
         <div className='row mt-3'>
           <ul className='list-group'>
             {this.state.displayFilms.map(film => {
-              let btnClass = "ml-2 btn btn-primary"; //${film.isFav ? 'danger' : 'primary'}";
+              let btnClass = `ml-2 btn btn-${
+                film.isFav ? "danger" : "primary"
+              }`;
               return (
                 <li className='list-group-item p-3' key={film.episode_id}>
-                  {film.title}
+                  <a href={`/films/${film.episode_id}`}>{film.title}</a>
                   <button
                     type='button'
                     className={btnClass}
