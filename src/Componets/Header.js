@@ -18,7 +18,7 @@ const Header = props => {
             ""
           ) : (
             <li className='nav-item'>
-              <a className='nav-link disabled' aria-disabled='true'>
+              <a className='nav-link disabled' href='/' aria-disabled='true'>
                 {film.title}
               </a>
             </li>

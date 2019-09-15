@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import ls from "local-storage";
+import ItemFilm from "./ItemFilm";
+
 export class Film extends Component {
   state = {
     films: [],
@@ -84,19 +86,12 @@ export class Film extends Component {
         <div className='row mt-3'>
           <ul className='list-group'>
             {this.state.displayFilms.map(film => {
-              let btnClass = `ml-2 btn btn-${
-                film.isFav ? "danger" : "primary"
-              }`;
               return (
-                <li className='list-group-item p-3' key={film.episode_id}>
-                  <a href={`/films/${film.episode_id}`}>{film.title}</a>
-                  <button
-                    type='button'
-                    className={btnClass}
-                    onClick={() => this.favFilmsHandler(film.episode_id)}>
-                    {film.isFav ? "UnFavorite" : "Favorite"}
-                  </button>
-                </li>
+                <ItemFilm
+                  key={film.episode_id}
+                  favFilmsHandler={this.favFilmsHandler}
+                  film={film}
+                />
               );
             })}
           </ul>
