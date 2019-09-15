@@ -5,18 +5,25 @@ import axios from "axios";
 export class FilmDetails extends Component {
   state = {
     film: {},
-    moreDetails: {},
+    characters: [],
+    starships: [],
+    vehicles: [],
+    species: [],
     error: false
   };
+
   componentDidMount = () => {
     const { params } = this.props.match;
+    let data = {};
     axios
       .get(`https://swapi.co/api/films/${params.episode_id}`)
       .then(response => {
+        this.setState({
+          film: response.data
+        });
         return response;
       })
       .then(response => {
-        let data = {};
         ["characters", "planets", "starships", "vehicles", "species"].forEach(
           keyName => {
             data[keyName] = [];
@@ -25,6 +32,7 @@ export class FilmDetails extends Component {
                 .get(row)
                 .then(response => {
                   data[keyName].push(response.data);
+                  this.setState(data);
                 })
                 .catch(error => {
                   console.log("ERROR", error);
@@ -32,10 +40,6 @@ export class FilmDetails extends Component {
             });
           }
         );
-        this.setState({
-          film: response.data,
-          moreDetails: data
-        });
       })
       .catch(error => {
         this.setState({ error: true });
@@ -43,7 +47,15 @@ export class FilmDetails extends Component {
   };
 
   render() {
-    const { error, film } = this.state;
+    const {
+      error,
+      film,
+      characters,
+      planets,
+      starships,
+      vehicles,
+      species
+    } = this.state;
     return (
       <div>
         <Header error={error} film={film} />
@@ -61,14 +73,77 @@ export class FilmDetails extends Component {
                     Director: {film.director}, Producer: {film.producer}
                   </h5>
                   <p className='card-text'>{film.opening_crawl}</p>
-                  {/* characters */}
-                  <div className='card'>
-                    <div className='card-body'>
-                      <h4 className='card-title'>characters</h4>
-                      <ul>
-                        <li>{JSON.stringify(this.state.moreDetails)}</li>
-                        <li>1</li>
-                        <li>1</li>
+                  <div className='row'>
+                    <div className='col'>
+                      <h4 className='card-title'>Characters</h4>
+                      <ul className='list-group'>
+                        {(characters || []).map(character => {
+                          return (
+                            <li
+                              className='list-group-item p-3'
+                              key={character.url}>
+                              {character.name}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+
+                    <div className='col'>
+                      <h4 className='card-title'>Starships</h4>
+                      <ul className='list-group'>
+                        {(starships || []).map(starship => {
+                          return (
+                            <li
+                              className='list-group-item p-3'
+                              key={starship.url}>
+                              {starship.name}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+
+                    <div className='col'>
+                      <h4 className='card-title'>Planets</h4>
+                      <ul className='list-group'>
+                        {(planets || []).map(planet => {
+                          return (
+                            <li
+                              className='list-group-item p-3'
+                              key={planet.url}>
+                              {planet.name}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+
+                    <div className='col'>
+                      <h4 className='card-title'>Vehicles</h4>
+                      <ul className='list-group'>
+                        {(vehicles || []).map(vehicle => {
+                          return (
+                            <li
+                              className='list-group-item p-3'
+                              key={vehicle.url}>
+                              {vehicle.name}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+
+                    <div className='col'>
+                      <h4 className='card-title'>Species</h4>
+                      <ul className='list-group'>
+                        {(species || []).map(spec => {
+                          return (
+                            <li className='list-group-item p-3' key={spec.url}>
+                              {spec.name}
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   </div>
