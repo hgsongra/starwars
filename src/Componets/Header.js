@@ -1,6 +1,7 @@
 import React from "react";
 
-function Header() {
+const Header = props => {
+  const { error, film } = props;
   return (
     <nav className='navbar navbar-expand-lg navbar-light bg-light'>
       <a className='navbar-brand' href='/'>
@@ -13,10 +14,19 @@ function Header() {
               Home <span className='sr-only'>(current)</span>
             </a>
           </li>
+          {error ? (
+            ""
+          ) : (
+            <li className='nav-item'>
+              <a className='nav-link disabled' aria-disabled='true'>
+                {film.title}
+              </a>
+            </li>
+          )}
         </ul>
       </div>
     </nav>
   );
-}
+};
 
 export default Header;

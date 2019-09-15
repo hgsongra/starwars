@@ -6,7 +6,7 @@ class App extends Component {
   render() {
     return (
       <>
-        <Header />
+        <Header error={true} />
         <div className='container'>
           <div className='main'>
             <Film />
